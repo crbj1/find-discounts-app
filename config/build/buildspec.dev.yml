@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo Installing npm dependencies
+      - npm install
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Running Tests
+      - npm test
+      - echo Packaging the service
+      - sam build --build-dir my-artifact --parameter-overrides "ParameterKey=Stage,ParameterValue=dev"
+artifacts:
+  files:
+    - my-artifact/*
+  name: MyProjectArtifacts
+cache:
+  paths:
+    - 'node_modules/**/*'
