@@ -40,6 +40,102 @@ Resources:
             Method: post
             RestApiId: !Ref ApiDeployment
 
+  updateUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user-crud/
+      Handler: handler.updateUser
+      Environment:
+        Variables:
+          USER_TABLE_NAME: !Ref userTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:UpdateItem
+              Resource: !GetAtt userTable.Arn
+      Events:
+        UpdateUser:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /user-register/{id}
+            Method: put
+            RestApiId: !Ref ApiDeployment
+
+  deleteUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user-crud/
+      Handler: handler.deleteUser
+      Environment:
+        Variables:
+          USER_TABLE_NAME: !Ref userTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DeleteItem
+              Resource: !GetAtt userTable.Arn
+      Events:
+        DeleteUser:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /user-register/{id}
+            Method: delete
+            RestApiId: !Ref ApiDeployment
+
+  getUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user-crud/
+      Handler: handler.getUser
+      Environment:
+        Variables:
+          USER_TABLE_NAME: !Ref userTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource: !GetAtt userTable.Arn
+      Events:
+        GetUser:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /user-register/{id}
+            Method: get
+            RestApiId: !Ref ApiDeployment
+
+  getAllUsers:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: user-crud/
+      Handler: handler.getAllUsers
+      Environment:
+        Variables:
+          USER_TABLE_NAME: !Ref userTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Scan
+              Resource: !GetAtt userTable.Arn
+      Events:
+        GetAllUsers:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /user-register
+            Method: get
+            RestApiId: !Ref ApiDeployment
+
   # User dynamodb table
   userTable:
     Type: AWS::DynamoDB::Table
