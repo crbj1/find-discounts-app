@@ -1,4 +1,4 @@
-const { CognitoJwtVerifier } = require("aws-jwt-verify");
+import { CognitoJwtVerifier } from "aws-jwt-verify";
 const COGNITO_USERPOOL_ID = process.env.COGNITO_USERPOOL_ID;
 const COGNITO_WEB_CLIENT_ID = process.env.COGNITO_WEB_CLIENT_ID;
 
@@ -33,7 +33,7 @@ const generatePolicy = (principalId, effect, resource) => {
     return authResponse;
 };
 
-exports.handler = async (event, context, callback) => {
+export async function handler(event, context, callback) {
     //lambda authorizer code
     var token = event.authorizationToken;
     // Validate the token
@@ -43,4 +43,4 @@ exports.handler = async (event, context, callback) => {
     } catch (err) {
         callback("Error: Invalid token");
     }
-};
+}
