@@ -325,4 +325,4 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       UserPoolId: !Ref cognitoUserPool
-      Domain: !Join ["", ["finddiscountsINmonroe-", Ref: Stage ]]
+      Domain: !Join ["", ["finddiscountsinmonroe-", Ref: Stage ]]
