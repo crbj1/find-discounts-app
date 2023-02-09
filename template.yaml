@@ -16,6 +16,17 @@ Resources:
     Properties:
       StageName: !Ref Stage
 
+  # Authorizer
+  authorizer:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: authorizer/
+      Handler: authorizer.handler
+      Environment:
+        Variables:
+          COGNITO_USERPOOL_ID: !Ref cognitoUserPool
+          COGNITO_WEB_CLIENT_ID: !Ref cognitoUserPoolWebClient
+
   createUser:
     Type: AWS::Serverless::Function
     Properties:
@@ -35,7 +46,7 @@ Resources:
         CreateUser:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /user-register
             Method: post
             RestApiId: !Ref ApiDeployment
@@ -59,7 +70,7 @@ Resources:
         UpdateUser:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /user-register/{id}
             Method: put
             RestApiId: !Ref ApiDeployment
@@ -83,7 +94,7 @@ Resources:
         DeleteUser:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /user-register/{id}
             Method: delete
             RestApiId: !Ref ApiDeployment
@@ -107,7 +118,7 @@ Resources:
         GetUser:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /user-register/{id}
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -131,7 +142,7 @@ Resources:
         GetAllUsers:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /user-register
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -169,7 +180,7 @@ Resources:
         CreateLocation:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /location
             Method: post
             RestApiId: !Ref ApiDeployment
@@ -193,7 +204,7 @@ Resources:
         UpdateLocation:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /location/{id}
             Method: put
             RestApiId: !Ref ApiDeployment
@@ -217,7 +228,7 @@ Resources:
         DeleteLocation:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /location/{id}
             Method: delete
             RestApiId: !Ref ApiDeployment
@@ -241,7 +252,7 @@ Resources:
         GetLocation:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /location/{id}
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -265,7 +276,7 @@ Resources:
         GetAllLocations:
           Type: Api
           Properties:
-            # Auth: authorizer
+            Auth: authorizer
             Path: /location
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -282,3 +293,40 @@ Resources:
       KeySchema:
         - AttributeName: locationId
           KeyType: HASH
+
+  # Cognito User Pool
+  cognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Join ["", ["find-discounts-", Ref: Stage, "-userpool"]]
+
+  #User Pool Web Client
+  cognitoUserPoolWebClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref cognitoUserPool
+      ClientName: web
+      AllowedOAuthFlowsUserPoolClient: true
+      SupportedIdentityProviders:
+        - COGNITO
+      AllowedOAuthScopes:
+        - phone
+        - email
+        - profile
+        - openid
+      AllowedOAuthFlows:
+        - implicit
+      ExplicitAuthFlows:
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_USER_SRP_AUTH
+      CallbackURLs:
+        - http://localhost:3000
+
+  #User Pool Domain
+  cognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      UserPoolId: !Ref cognitoUserPool
+      Domain: !Join ["", ["finddiscountsINmonroe-", Ref: Stage ]]
