@@ -140,11 +140,145 @@ Resources:
   userTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Join ["", ["user-", Ref: Stage]]
+      TableName: !Join ["", ["user-", Ref: Stage, "-table"]]
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: userId
           AttributeType: S
       KeySchema:
         - AttributeName: userId
+          KeyType: HASH
+
+
+  createLocation:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: location-crud/
+      Handler: handler.createLocation
+      Environment:
+        Variables:
+          LOCATION_TABLE_NAME: !Ref locationTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource: !GetAtt locationTable.Arn
+      Events:
+        CreateLocation:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /location
+            Method: post
+            RestApiId: !Ref ApiDeployment
+
+  updateLocation:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: location-crud/
+      Handler: handler.updateLocation
+      Environment:
+        Variables:
+          LOCATION_TABLE_NAME: !Ref locationTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:UpdateItem
+              Resource: !GetAtt locationTable.Arn
+      Events:
+        UpdateLocation:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /location/{id}
+            Method: put
+            RestApiId: !Ref ApiDeployment
+
+  deleteLocation:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: location-crud/
+      Handler: handler.deleteLocation
+      Environment:
+        Variables:
+          LOCATION_TABLE_NAME: !Ref locationTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DeleteItem
+              Resource: !GetAtt locationTable.Arn
+      Events:
+        DeleteLocation:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /location/{id}
+            Method: delete
+            RestApiId: !Ref ApiDeployment
+
+  getLocation:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: location-crud/
+      Handler: handler.getLocation
+      Environment:
+        Variables:
+          LOCATION_TABLE_NAME: !Ref locationTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+              Resource: !GetAtt locationTable.Arn
+      Events:
+        GetLocation:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /location/{id}
+            Method: get
+            RestApiId: !Ref ApiDeployment
+
+  getAllLocations:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: location-crud/
+      Handler: handler.getAllLocations
+      Environment:
+        Variables:
+          LOCATION_TABLE_NAME: !Ref locationTable
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Scan
+              Resource: !GetAtt locationTable.Arn
+      Events:
+        GetAllLocations:
+          Type: Api
+          Properties:
+            # Auth: authorizer
+            Path: /location
+            Method: get
+            RestApiId: !Ref ApiDeployment
+
+  # Location dynamodb table
+  locationTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Join ["", ["location-", Ref: Stage, "-table"]]
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: locationId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: locationId
           KeyType: HASH
