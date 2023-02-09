@@ -15,6 +15,12 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
+      Auth:
+        DefaultAuthorizer: MyLambdaTokenAuthorizer
+        Authorizers:
+          MyLambdaTokenAuthorizer:
+            FunctionArn: !GetAtt authorizer.Arn
+
 
   # Authorizer
   authorizer:
@@ -46,7 +52,6 @@ Resources:
         CreateUser:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /user-register
             Method: post
             RestApiId: !Ref ApiDeployment
@@ -70,7 +75,6 @@ Resources:
         UpdateUser:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /user-register/{id}
             Method: put
             RestApiId: !Ref ApiDeployment
@@ -94,7 +98,6 @@ Resources:
         DeleteUser:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /user-register/{id}
             Method: delete
             RestApiId: !Ref ApiDeployment
@@ -118,7 +121,6 @@ Resources:
         GetUser:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /user-register/{id}
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -142,7 +144,6 @@ Resources:
         GetAllUsers:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /user-register
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -180,7 +181,6 @@ Resources:
         CreateLocation:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /location
             Method: post
             RestApiId: !Ref ApiDeployment
@@ -204,7 +204,6 @@ Resources:
         UpdateLocation:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /location/{id}
             Method: put
             RestApiId: !Ref ApiDeployment
@@ -228,7 +227,6 @@ Resources:
         DeleteLocation:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /location/{id}
             Method: delete
             RestApiId: !Ref ApiDeployment
@@ -252,7 +250,6 @@ Resources:
         GetLocation:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /location/{id}
             Method: get
             RestApiId: !Ref ApiDeployment
@@ -276,7 +273,6 @@ Resources:
         GetAllLocations:
           Type: Api
           Properties:
-            Auth: authorizer
             Path: /location
             Method: get
             RestApiId: !Ref ApiDeployment
