@@ -14,7 +14,7 @@ phases:
       - echo Running Tests
       - npm test
       - echo Packaging the service
-      - sam build --build-dir my-artifact --parameter-overrides "ParameterKey=Stage,ParameterValue=dev"
+      - sam build --build-dir my-artifact --manifest package.json --parameter-overrides "ParameterKey=Stage,ParameterValue=dev"
 artifacts:
   files:
     - my-artifact/*
