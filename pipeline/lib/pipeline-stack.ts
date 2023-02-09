@@ -39,7 +39,9 @@ export class PipelineStack extends cdk.Stack {
     const buildOutput = new codepipeline.Artifact();
     //Declare a new CodeBuild project
     const buildProject = new codebuild.PipelineProject(this, 'Build', {
-      environment: { buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_2 },
+      // buildSpec?:
+      concurrentBuildLimit: 1,
+      environment: { buildImage: codebuild.LinuxBuildImage.STANDARD_5_0 },
       environmentVariables: {
         'PACKAGE_BUCKET': {
           value: artifactsBucket.bucketName
@@ -55,6 +57,27 @@ export class PipelineStack extends cdk.Stack {
           project: buildProject,
           input: sourceOutput,
           outputs: [buildOutput],
+        })
+      ]
+    });
+
+    // Deploy stage
+    pipeline.addStage({
+      stageName: 'Dev',
+      actions: [
+        new codepipeline_actions.CloudFormationCreateReplaceChangeSetAction({
+          actionName: 'CreateChangeSet',
+          templatePath: buildOutput.atPath("packaged.yaml"),
+          stackName: 'find-discounts-app',
+          adminPermissions: true,
+          changeSetName: 'find-discounts-app-dev-changeset',
+          runOrder: 1
+        }),
+        new codepipeline_actions.CloudFormationExecuteChangeSetAction({
+          actionName: 'Deploy',
+          stackName: 'find-discounts-app',
+          changeSetName: 'find-discounts-app-dev-changeset',
+          runOrder: 2
         })
       ]
     });
