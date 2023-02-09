@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - pip3 install --upgrade aws-sam-cli
+      - sam --version
+      - npm install
+
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - npm run test
+
+  build:
+    on-failure: ABORT
+    commands:
+      - sam build --parameter-overrides "ParameterKey=Stage,ParameterValue=dev"
+
+  post_build:
+    on-failure: ABORT
+    commands:
+      - sam package --s3-bucket $PACKAGE_BUCKET --output-template-file packaged.yaml
+
+artifacts:
+  discard-paths: yes
+  files:
+    - packaged.yaml
