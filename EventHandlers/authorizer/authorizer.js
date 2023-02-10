@@ -33,7 +33,7 @@ const generatePolicy = (principalId, effect, resource) => {
     return authResponse;
 };
 
-export async function handler(event, context, callback) {
+module.exports.handler =  async (event, context, callback) => {
     //lambda authorizer code
     var token = event.authorizationToken;
     // Validate the token
@@ -43,4 +43,4 @@ export async function handler(event, context, callback) {
     } catch (err) {
         callback("Error: Invalid token");
     }
-}
+};
