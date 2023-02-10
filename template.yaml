@@ -26,8 +26,8 @@ Resources:
   authorizer:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: authorizer/
-      Handler: authorizer.handler
+      CodeUri: EventHandlers/
+      Handler: authorizer/authorizer.handler
       Environment:
         Variables:
           COGNITO_USERPOOL_ID: !Ref cognitoUserPool
@@ -36,8 +36,8 @@ Resources:
   createUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: user-crud/
-      Handler: handler.createUser
+      CodeUri: EventHandlers/
+      Handler: user-crud/handler.createUser
       Environment:
         Variables:
           USER_TABLE_NAME: !Ref userTable
@@ -59,8 +59,8 @@ Resources:
   updateUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: user-crud/
-      Handler: handler.updateUser
+      CodeUri: EventHandlers/
+      Handler: user-crud/handler.updateUser
       Environment:
         Variables:
           USER_TABLE_NAME: !Ref userTable
@@ -82,8 +82,8 @@ Resources:
   deleteUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: user-crud/
-      Handler: handler.deleteUser
+      CodeUri: EventHandlers/
+      Handler: user-crud/handler.deleteUser
       Environment:
         Variables:
           USER_TABLE_NAME: !Ref userTable
@@ -105,8 +105,8 @@ Resources:
   getUser:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: user-crud/
-      Handler: handler.getUser
+      CodeUri: EventHandlers/
+      Handler: user-crud/handler.getUser
       Environment:
         Variables:
           USER_TABLE_NAME: !Ref userTable
@@ -128,8 +128,8 @@ Resources:
   getAllUsers:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: user-crud/
-      Handler: handler.getAllUsers
+      CodeUri: EventHandlers/
+      Handler: user-crud/handler.getAllUsers
       Environment:
         Variables:
           USER_TABLE_NAME: !Ref userTable
@@ -165,8 +165,8 @@ Resources:
   createLocation:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: location-crud/
-      Handler: handler.createLocation
+      CodeUri: EventHandlers/
+      Handler: location-crud/handler.createLocation
       Environment:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
@@ -188,8 +188,8 @@ Resources:
   updateLocation:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: location-crud/
-      Handler: handler.updateLocation
+      CodeUri: EventHandlers/
+      Handler: location-crud/handler.updateLocation
       Environment:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
@@ -211,8 +211,8 @@ Resources:
   deleteLocation:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: location-crud/
-      Handler: handler.deleteLocation
+      CodeUri: EventHandlers/
+      Handler: location-crud/handler.deleteLocation
       Environment:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
@@ -234,8 +234,8 @@ Resources:
   getLocation:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: location-crud/
-      Handler: handler.getLocation
+      CodeUri: EventHandlers/
+      Handler: location-crud/handler.getLocation
       Environment:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
@@ -257,8 +257,8 @@ Resources:
   getAllLocations:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: location-crud/
-      Handler: handler.getAllLocations
+      CodeUri: EventHandlers/
+      Handler: location-crud/handler.getAllLocations
       Environment:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable

@@ -9,6 +9,7 @@ phases:
     commands:
       - pip3 install --upgrade aws-sam-cli
       - sam --version
+      - cd EventHandlers
       - npm install
 
   pre_build:
@@ -19,6 +20,7 @@ phases:
   build:
     on-failure: ABORT
     commands:
+      - cd ..
       - sam build --parameter-overrides "ParameterKey=Stage,ParameterValue=dev"
 
   post_build:
