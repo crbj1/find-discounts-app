@@ -326,3 +326,26 @@ Resources:
     Properties:
       UserPoolId: !Ref cognitoUserPool
       Domain: !Join ["", ["finddiscountsinmonroe-", Ref: Stage ]]
+
+    createCognitoUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: EventHandlers/
+      Handler: cognito/handler.createCognitoUser
+      Environment:
+        Variables:
+          USER_POOL_ID: !Ref cognitoUserPool
+          AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - cognito-idp:AdminCreateUser
+              Resource: !GetAtt userTable.Arn
+      Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /cognito-user
+            Method: post
+            RestApiId: !Ref ApiDeployment
