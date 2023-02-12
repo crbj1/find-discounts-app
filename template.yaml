@@ -327,7 +327,7 @@ Resources:
       UserPoolId: !Ref cognitoUserPool
       Domain: !Join ["", ["finddiscountsinmonroe-", Ref: Stage ]]
 
-    createCognitoUser:
+  createCognitoUser:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: EventHandlers/
@@ -343,7 +343,7 @@ Resources:
                 - cognito-idp:AdminCreateUser
               Resource: !GetAtt userTable.Arn
       Events:
-        CreateUser:
+        CreateCognitoUser:
           Type: Api
           Properties:
             Path: /cognito-user
