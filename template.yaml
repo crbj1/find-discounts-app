@@ -341,7 +341,7 @@ Resources:
             - Effect: Allow
               Action:
                 - cognito-idp:AdminCreateUser
-              Resource: !GetAtt userTable.Arn
+              Resource: !GetAtt cognitoUserPool.Arn
       Events:
         CreateCognitoUser:
           Type: Api
