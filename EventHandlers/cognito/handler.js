@@ -32,7 +32,7 @@ module.exports.createCognitoUser = async (event, context, callback) => {
                 }
             ],
             TemporaryPassword: data.password,
-            DesiredDeliveryMediums: [ EMAIL ]
+            DesiredDeliveryMediums: [ "EMAIL" ]
         };
         const user = await client.adminCreateUser(params).promise();
         callback(null, send(201, user));
