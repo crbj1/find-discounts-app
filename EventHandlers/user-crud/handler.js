@@ -1,4 +1,5 @@
 'use strict';
+const uuid = require('uuid');
 const DynamoDB = require("aws-sdk/clients/dynamodb");
 
 const documentClient = new DynamoDB.DocumentClient({
@@ -22,10 +23,11 @@ module.exports.createUser = async (event, context, callback) => {
     context.callbackWaitsForEmptyEventLoop = false; //when callback is called, it is immediately executed
     let data = JSON.parse(event.body);
     try {
+        const uniqueRandomID = uuid.v4();
         const params = {
             TableName: USER_TABLE_NAME,
             Item: {
-                userId: data.id,
+                userId: uniqueRandomID,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,

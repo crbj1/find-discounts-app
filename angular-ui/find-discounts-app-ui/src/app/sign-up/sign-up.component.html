@@ -2,31 +2,119 @@
     <div class="col-4">
         <div class="card">
             <div class="card-body" *ngIf="!isConfirm">
-                <div class="row">
-                    <div class="col mb-2">
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="email" id="email" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control form-control-sm">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-2">
-                        <label for="password" class="form-label">Password:</label>
-                        <div class="input-group input-group-sm">
-                            <input [type]="user.showPassword ? 'text' : 'password'" id="password" name="password" #password="ngModel" [(ngModel)]="user.password" class="form-control form-control-sm">
-                            <button type="button" class="btn btn-outline-secondary" (click)="user.showPassword = !user.showPassword">
-                                <i class="bi" [ngClass]="{'bi-eye-fill': !user.showPassword, 'bi-eye-slash-fill': user.showPassword}"></i>
-                            </button>
+                <form [formGroup]="signUpForm" (ngSubmit)="signUp()">
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" id="email" name="email" formControlName="email" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                <div *ngIf="f.email.errors.required">Email is required.</div>
+                                <div *ngIf="f.email.errors.email">Invalid email</div>
+                                <div *ngIf="f.email.errors.maxLength">Email cannot exceed 50 characters.</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col d-grid">
-                        <button type="button" (click)="signUp()" class="btn btn-sm btn-success" [disabled]="loading">
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
-                            Sign up
-                        </button>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="firstName" class="form-label">First name:</label>
+                            <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+                            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                                <div *ngIf="f.firstName.errors.required">First name is required.</div>
+                                <div *ngIf="f.firstName.errors.minLength">First name must be at least 2 characters</div>
+                                <div *ngIf="f.firstName.errors.maxLength">First name cannot exceed 35 characters.</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="lastName" class="form-label">Last name:</label>
+                            <input type="text" id="lastName" name="lastName" formControlName="lastName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+                            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                                <div *ngIf="f.lastName.errors.required">Last name is required.</div>
+                                <div *ngIf="f.lastName.errors.minLength">Last name must be at least 2 characters</div>
+                                <div *ngIf="f.lastName.errors.maxLength">Last name cannot exceed 35 characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="dateOfBirth" class="form-label">Date of Birth:</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" formControlName="dateOfBirth" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.dateOfBirth.errors }">
+                            <div *ngIf="submitted && f.dateOfBirth.errors" class="invalid-feedback">
+                                <div *ngIf="f.dateOfBirth.errors.required">Date of Birth is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="streetAddress1" class="form-label">Street Address 1:</label>
+                            <input type="text" id="streetAddress1" name="streetAddress1" formControlName="streetAddress1" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.streetAddress1.errors }">
+                            <div *ngIf="submitted && f.streetAddress1.errors" class="invalid-feedback">
+                                <div *ngIf="f.streetAddress1.errors.maxLength">Street Address 1 cannot exceed 50 characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="streetAddress2" class="form-label">Street Address 2:</label>
+                            <input type="text" id="streetAddress2" name="streetAddress2" formControlName="streetAddress2" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.streetAddress2.errors }">
+                            <div *ngIf="submitted && f.streetAddress2.errors" class="invalid-feedback">
+                                <div *ngIf="f.streetAddress2.errors.maxLength">Street Address 2 cannot exceed 50 characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="city" class="form-label">City:</label>
+                            <input type="text" id="city" name="city" formControlName="city" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.city.errors }">
+                            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                                <div *ngIf="f.city.errors.maxLength">City cannot exceed 50 characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="state" class="form-label">State:</label>
+                            <select formControlName="state" class="custom-select">
+                                <option value="" disabled>Choose your state</option>
+                                <option *ngFor="let state of State" [ngValue]="state">{{state}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="zipCode" class="form-label">Zip Code:</label>
+                            <input type="text" id="zipCode" name="zipCode" formControlName="zipCode" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.zipCode.errors }">
+                            <div *ngIf="submitted && f.zipCode.errors" class="invalid-feedback">
+                                <div *ngIf="f.zipCode.errors.minLength">Zip Code must be at least 5 characters</div>
+                                <div *ngIf="f.zipCode.errors.maxLength">Zip Code cannot exceed 9 characters.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col mb-2">
+                            <label for="password" class="form-label">Password:</label>
+                            <div class="input-group input-group-sm">
+                                <input [type]="user.showPassword ? 'text' : 'password'" id="password" name="password" formControlName="password" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.password.errors }">
+                                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                    <div *ngIf="f.password.errors.required">Password is required.</div>
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary" (click)="user.showPassword = !user.showPassword">
+                                    <i class="bi" [ngClass]="{'bi-eye-fill': !user.showPassword, 'bi-eye-slash-fill': user.showPassword}"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-grid">
+                            <button type="submit" class="btn btn-sm btn-success" [disabled]="loading">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
+                                Sign up
+                            </button>
+                            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="card-body" *ngIf="isConfirm">
                 <div class="row">
