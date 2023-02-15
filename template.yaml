@@ -20,8 +20,9 @@ Resources:
         Authorizers:
           MyLambdaTokenAuthorizer:
             FunctionArn: !GetAtt authorizer.Arn
-      Cors:
-        AllowOrigin: 'http://localhost:4200'
+      Cors: 
+        AllowOrigin: http://localhost:4200
+      OpenApiVersion: 3.1.0
 
 
 
