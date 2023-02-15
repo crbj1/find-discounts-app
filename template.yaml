@@ -20,6 +20,9 @@ Resources:
         Authorizers:
           MyLambdaTokenAuthorizer:
             FunctionArn: !GetAtt authorizer.Arn
+      Cors:
+        AllowOrigin: 'http://localhost:4200'
+
 
 
   # Authorizer
