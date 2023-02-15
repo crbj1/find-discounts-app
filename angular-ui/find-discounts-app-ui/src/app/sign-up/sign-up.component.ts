@@ -18,8 +18,8 @@ export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
   loading: boolean;
   isConfirm: boolean;
-  submitted1: boolean;
-  error: string;
+  submitted: boolean;
+  error = '';
 
   user: IUser;
   restUser: User;
@@ -30,7 +30,7 @@ export class SignUpComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private cognitoService: CognitoService, private restService: RestService, private logger: Logger) {
     this.loading = false;
     this.isConfirm = false;
-    this.submitted1 = false;
+    this.submitted = false;
     this.user = {} as IUser;
     this.restUser = {} as User;
   }
@@ -53,7 +53,7 @@ export class SignUpComponent implements OnInit {
   get f() { return this.signUpForm.controls; }
 
   public signUp(): void {
-    this.submitted1 = true;
+    this.submitted = true;
 
     if (this.signUpForm.invalid) {
       this.logger.log("Form is invalid");
@@ -76,7 +76,18 @@ export class SignUpComponent implements OnInit {
 
     this.cognitoService.signUp(this.user)
     .then(() => {
-      this.restService.createUser(this.restUser);
+      this.restService.createUser(this.restUser)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          this.logger.log('Newly created user: ' + data);
+        },
+        error: (error) => {
+          this.logger.error(error);
+          this.error = error;
+          this.loading = false;
+        }
+      });
       this.loading = false;
       this.isConfirm = true;
     }).catch(() => {

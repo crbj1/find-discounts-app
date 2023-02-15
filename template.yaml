@@ -52,6 +52,8 @@ Resources:
         CreateUser:
           Type: Api
           Properties:
+            Auth:
+              Authorizer: NONE
             Path: /user-register
             Method: post
             RestApiId: !Ref ApiDeployment

@@ -28,7 +28,10 @@ export class CognitoService {
   public signUp(user: IUser): Promise<any> {
     return Auth.signUp({
       username: user.email,
-      password: user.password
+      password: user.password,
+      attributes: {
+        email: user.email
+      }
     });
   }
 
