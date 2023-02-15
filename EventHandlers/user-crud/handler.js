@@ -15,6 +15,9 @@ const USER_TABLE_NAME = process.env.USER_TABLE_NAME;
 const send = (statusCode, data) => {
     return {
         statusCode,
+        headers: {
+            AccessControlAllowOrigin: [ 'http://localhost:4200']
+        },
         body: JSON.stringify(data)
     };
 }
