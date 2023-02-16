@@ -17,6 +17,7 @@ Resources:
       StageName: !Ref Stage
       Auth:
         DefaultAuthorizer: MyLambdaTokenAuthorizer
+        AddDefaultAuthorizerToCorsPreflight: false
         Authorizers:
           MyLambdaTokenAuthorizer:
             FunctionArn: !GetAtt authorizer.Arn
