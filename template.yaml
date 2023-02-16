@@ -25,8 +25,6 @@ Resources:
         AllowOrigin: "'http://localhost:4200'" 
         AllowHeaders: "'Content-type'"
 
-
-
   # Authorizer
   authorizer:
     Type: AWS::Serverless::Function
@@ -335,3 +333,76 @@ Resources:
     Properties:
       UserPoolId: !Ref cognitoUserPool
       Domain: !Join ["", ["finddiscountsinmonroe-", Ref: Stage ]]
+
+  # Map
+  Map:
+    Type: AWS::Location::Map
+    Properties:
+      Configuration:
+        Style: VectorEsriNavigation
+      MapName: !Join ["", ["find-discounts-", Ref: Stage, "-map"]]
+      PricingPlan: RequestBasedUsage
+
+  # Index
+  Index:
+    Type: AWS::Location::PlaceIndex
+    Properties:
+      DataSource: Esri
+      DataSourceConfiguration:
+        IntendedUse: Storage
+      IndexName: !Join ["", ["find-discounts-", Ref: Stage, "-index"]]
+      PricingPlan: RequestBasedUsage
+
+  #Identity Pool
+  IdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: !Join ["", ["find-discounts-", Ref: Stage, "-identitypool"]]
+      AllowUnauthenticatedIdentities: true
+
+  CognitoUnauthorizedRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action:
+              - 'sts:AssumeRoleWithWebIdentity'
+            Condition:
+              StringEquals:
+                'cognito-identity.amazonaws.com:aud': !Ref IdentityPool
+              'ForAnyValue:StringLike':
+                'cognito-identity.amazonaws.com:amr': unauthenticated
+      Policies:
+        - PolicyName: !Join ["", ["find-discounts-", Ref: Stage, "-unauthorized-policy"]]
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Sid: SearchPlaceIndexOnly
+                Effect: Allow
+                Action:
+                  - 'geo:SearchPlaceIndexForText'
+                Resource: !Sub 'arn:${AWS::Partition}:geo:${AWS::Region}:${AWS::AccountId}:place-index/${Index}'
+                Condition:
+                  StringLike:
+                    'aws:Referer':
+                      - !Join ["", ["finddiscountsinmonroe-", Ref: Stage, "/*"]]
+              - Sid: MapsReadOnly
+                Effect: Allow
+                Action:
+                  - 'geo:GetMap*'
+                Resource: !Sub 'arn:${AWS::Partition}:geo:${AWS::Region}:${AWS::AccountId}:map/${Map}'
+                Condition:
+                  StringLike:
+                    'aws:Referer':
+                      - !Join ["", ["finddiscountsinmonroe", Ref: Stage, "/*"]]
+  
+  IdentityPoolRoleMapping:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref IdentityPool
+      Roles:
+        unauthenticated: !GetAtt CognitoUnauthorizedRole.Arn
