@@ -16,7 +16,7 @@ const send = (statusCode, data) => {
     return {
         statusCode,
         headers: {
-            AccessControlAllowOrigin: [ 'http://localhost:4200']
+            AccessControlAllowOrigin: "http://localhost:4200"
         },
         body: JSON.stringify(data)
     };
