@@ -8,11 +8,12 @@ import { HomeComponent } from "./home/home.component";
 import { AuthGuard } from "./_helpers/auth.guard";
 
 const routes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: '', redirectTo: 'home', pathMatch: 'full'},
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
     { path: 'signIn', component: SignInComponent },
     { path: 'signUp', component: SignUpComponent },
-    { path: '**', redirectTo: 'signIn' }
+    { path: '**', redirectTo: 'home' }
 ];
 
 export const appRoutingModule = RouterModule.forRoot(routes);

@@ -22,10 +22,10 @@ export class LocationService {
       },
       {
         container: "map",
-        center: [-123.1187, 49.2819], // initial map center point
-        zoom: 10, // initial map zoom
+        center: [-92.1171, 32.5046], // initial map center point
+        zoom: 11, // initial map zoom
         style: environment.MAP_NAME,
-        hash: true
+        // hash: true
       }
     );
 
