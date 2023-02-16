@@ -386,19 +386,19 @@ Resources:
                 Action:
                   - 'geo:SearchPlaceIndexForText'
                 Resource: !Sub 'arn:${AWS::Partition}:geo:${AWS::Region}:${AWS::AccountId}:place-index/${Index}'
-                Condition:
-                  StringLike:
-                    'aws:Referer':
-                      - !Join ["", ["finddiscountsinmonroe-", Ref: Stage, "/*"]]
+                # Condition:
+                #   StringLike:
+                #     'aws:Referer':
+                #       - !Join ["", ["finddiscountsinmonroe-", Ref: Stage, "/*"]]
               - Sid: MapsReadOnly
                 Effect: Allow
                 Action:
                   - 'geo:GetMap*'
                 Resource: !Sub 'arn:${AWS::Partition}:geo:${AWS::Region}:${AWS::AccountId}:map/${Map}'
-                Condition:
-                  StringLike:
-                    'aws:Referer':
-                      - !Join ["", ["finddiscountsinmonroe", Ref: Stage, "/*"]]
+                # Condition:
+                #   StringLike:
+                #     'aws:Referer':
+                #       - !Join ["", ["finddiscountsinmonroe", Ref: Stage, "/*"]]
   
   IdentityPoolRoleMapping:
     Type: AWS::Cognito::IdentityPoolRoleAttachment
