@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Amplify, Auth } from 'aws-amplify';
 
 import { environment } from 'src/environments/environment';
+import { Logger } from './logging.service';
 
 export interface IUser {
   email: string;
@@ -17,7 +18,7 @@ export class CognitoService {
 
   public authenticationSubject: BehaviorSubject<any>;
 
-  constructor() {
+  constructor(private logger: Logger) {
     Amplify.configure({
       Auth: environment.cognito
     });
@@ -26,6 +27,7 @@ export class CognitoService {
   }
 
   public signUp(user: IUser): Promise<any> {
+    this.logger.log("Inside CognitoService:SignUp Function");
     return Auth.signUp({
       username: user.email,
       password: user.password,
@@ -40,8 +42,10 @@ export class CognitoService {
   }
 
   public signIn(user: IUser): Promise<any> {
+    this.logger.log("Inside CognitoService:SignIn Function");
     return Auth.signIn(user.email, user.password)
     .then(() => {
+      this.logger.log("Sign In Succeeded");
       this.authenticationSubject.next(true);
     });
   }

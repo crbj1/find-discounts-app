@@ -16,15 +16,12 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.cognitoService.isAuthenticated()
-    // .then((success: boolean) => {
-    //   this.isAuthenticated = success;
-    // });
 
     this.cognitoService.authenticationSubject
     .subscribe(val => {
       this.isAuthenticated = val;
     });
+    
   }
 
   public signOut(): void {
