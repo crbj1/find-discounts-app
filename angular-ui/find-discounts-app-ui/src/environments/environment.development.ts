@@ -5,5 +5,6 @@ export const environment = {
     },
     API_INVOKE_URL: 'https://qpl280qpeb.execute-api.us-east-1.amazonaws.com/dev',
     IDENTITY_POOL_ID: 'us-east-1:ce7a8bfc-64f9-4b54-bb81-3405b37892d4',
-    MAP_NAME: 'find-discounts-dev-map'
+    MAP_NAME: 'find-discounts-dev-map',
+    INDEX_NAME: 'find-discounts-dev-index'
 };

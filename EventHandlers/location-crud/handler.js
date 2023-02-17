@@ -15,6 +15,9 @@ const LOCATION_TABLE_NAME = process.env.LOCATION_TABLE_NAME;
 const send = (statusCode, data) => {
     return {
         statusCode,
+        headers: {
+            "Access-Control-Allow-Origin": "http://localhost:4200"
+        },
         body: JSON.stringify(data)
     };
 }

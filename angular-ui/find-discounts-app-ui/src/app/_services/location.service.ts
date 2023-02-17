@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as AmazonLocation from 'amazon-location-helpers';
 import * as maplibregl from 'maplibre-gl';
+import * as AWS from 'aws-sdk';
 
 import { environment } from 'src/environments/environment';
 import { Logger } from './logging.service';
@@ -10,6 +11,8 @@ import { Logger } from './logging.service';
   providedIn: 'root'
 })
 export class LocationService {
+
+  map: maplibregl.Map;
 
   constructor(private logger: Logger) { }
 
@@ -33,5 +36,21 @@ export class LocationService {
     map.addControl(new maplibregl.NavigationControl(), "top-left");
     this.logger.log("Control added");
 
+  }
+
+  public async addMarkerFromText(text: string) {
+    //Find the location and put a marker on the map
+    const location = new AWS.Location({
+      credentials: await AmazonLocation.getCredentialsForIdentityPool(environment.IDENTITY_POOL_ID),
+      region: "us-east-1"
+    });
+
+    const data = await location.searchPlaceIndexForText({
+      IndexName: environment.INDEX_NAME,
+      Text: text
+    }).promise();
+
+    const position = data.Results[0].Place.Geometry.Point;
+    return new maplibregl.Marker().setLngLat([position[0], position[1]]).addTo(this.map);
   }
 }

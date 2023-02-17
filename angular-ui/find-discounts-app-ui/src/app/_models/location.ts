@@ -1,5 +1,5 @@
-export class Location {
-    locationId: number;
-    address?: string;
+export interface Location {
+    locationId?: number;
+    address: string;
     name?: string;
 }

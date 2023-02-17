@@ -13,6 +13,7 @@ import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RoutingModule } from './app-routing.module';
+import { AddLocationComponent } from './add-location/add-location.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { RoutingModule } from './app-routing.module';
     ProfileComponent,
     HomeComponent,
     PageNotFoundComponent,
+    AddLocationComponent,
   ],
   imports: [
     BrowserModule,
