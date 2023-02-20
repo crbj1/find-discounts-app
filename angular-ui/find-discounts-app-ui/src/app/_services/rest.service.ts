@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 
 import { User } from '../_models/user';
 import { Location } from '../_models/location';
+import { LocationDatabaseScan } from '../_models/locationDatabaseScan';
 
 @Injectable({ providedIn: 'root' })
 export class RestService {
@@ -35,9 +36,9 @@ export class RestService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
-  public getLocations(): Observable<Location[]> {
+  public getLocations(): Observable<LocationDatabaseScan> {
     return this.http
-    .get<Location[]>(`${environment.API_INVOKE_URL}/location`)
+    .get<LocationDatabaseScan>(`${environment.API_INVOKE_URL}/location`)
     .pipe(retry(1), catchError(this.handleError));
   }
 

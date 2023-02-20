@@ -36,6 +36,8 @@ export class LocationService {
     map.addControl(new maplibregl.NavigationControl(), "top-left");
     this.logger.log("Control added");
 
+    this.map = map;
+
   }
 
   public async addMarkerFromText(text: string) {
@@ -44,6 +46,7 @@ export class LocationService {
       credentials: await AmazonLocation.getCredentialsForIdentityPool(environment.IDENTITY_POOL_ID),
       region: "us-east-1"
     });
+    this.logger.log("Location: " + location);
 
     const data = await location.searchPlaceIndexForText({
       IndexName: environment.INDEX_NAME,

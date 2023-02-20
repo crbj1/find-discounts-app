@@ -36,6 +36,15 @@ Resources:
           COGNITO_USERPOOL_ID: !Ref cognitoUserPool
           COGNITO_WEB_CLIENT_ID: !Ref cognitoUserPoolWebClient
 
+  unauthorized:
+    Type: AWS::ApiGateway::GatewayResponse
+    Properties:
+      ResponseParameters:
+        "gatewayresponse.header.Access-Control-Allow-Origin": "'http://localhost:4200'"
+        "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-type'"
+      ResponseType: "DEFAULT_4XX"
+      RestApiId: !Ref ApiDeployment
+
   createUser:
     Type: AWS::Serverless::Function
     Properties:
@@ -186,8 +195,6 @@ Resources:
         CreateLocation:
           Type: Api
           Properties:
-            Auth:
-              Authorizer: NONE
             Path: /location
             Method: post
             RestApiId: !Ref ApiDeployment
@@ -280,8 +287,6 @@ Resources:
         GetAllLocations:
           Type: Api
           Properties:
-            Auth:
-              Authorizer: NONE
             Path: /location
             Method: get
             RestApiId: !Ref ApiDeployment
