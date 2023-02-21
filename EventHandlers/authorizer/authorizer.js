@@ -4,7 +4,7 @@ const COGNITO_WEB_CLIENT_ID = process.env.COGNITO_WEB_CLIENT_ID;
 
 const jwtVerifier = CognitoJwtVerifier.create({
     userPoolId: COGNITO_USERPOOL_ID,
-    tokenUse: "id",
+    tokenUse: "access",
     clientId: COGNITO_WEB_CLIENT_ID
 });
 
