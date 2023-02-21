@@ -51,7 +51,7 @@ export class CognitoService {
   }
 
   public signOut(): Promise<any> {
-    return Auth.signOut()
+    return Auth.signOut({ global: true })
     .then(() => {
       this.authenticationSubject.next(false);
     });
@@ -87,6 +87,10 @@ export class CognitoService {
 
   public async getAccessToken(): Promise<string> {
     return (await Auth.currentSession()).getAccessToken().getJwtToken();
+  }
+
+  public getCurrentSession() {
+    return Auth.currentSession();
   }
   
 }
