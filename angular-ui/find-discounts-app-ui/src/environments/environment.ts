@@ -1,10 +1,10 @@
 export const environment = {
     cognito: {
-        userPoolId: 'us-east-1_kbr1ZnkqJ',
-        userPoolWebClientId: 'ido65sfo75dqhdv43if5dpb4i',
+        userPoolId: 'us-east-1_Utr5xL3rs',
+        userPoolWebClientId: '78tv8ttjsd2ve90rtv2gli88pt',
     },
-    API_INVOKE_URL: 'https://qpl280qpeb.execute-api.us-east-1.amazonaws.com/dev',
-    IDENTITY_POOL_ID: 'us-east-1:ce7a8bfc-64f9-4b54-bb81-3405b37892d4',
+    API_INVOKE_URL: 'https://1lp4yxbrh5.execute-api.us-east-1.amazonaws.com/dev',
+    IDENTITY_POOL_ID: 'us-east-1:ee852bc8-99c8-4172-80d9-0009c01908a4',
     MAP_NAME: 'find-discounts-dev-map',
     INDEX_NAME: 'find-discounts-dev-index'
 }

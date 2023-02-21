@@ -16,7 +16,8 @@ const send = (statusCode, data) => {
     return {
         statusCode,
         headers: {
-            "Access-Control-Allow-Origin": "http://localhost:4200"
+            "Access-Control-Allow-Origin": "http://localhost:4200",
+            "Access-Control-Allow-Credentials": true
         },
         body: JSON.stringify(data)
     };
