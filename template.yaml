@@ -197,6 +197,8 @@ Resources:
         CreateLocation:
           Type: Api
           Properties:
+            Auth:
+              Authorizer: NONE
             Path: /location
             Method: post
             RestApiId: !Ref ApiDeployment
@@ -289,6 +291,8 @@ Resources:
         GetAllLocations:
           Type: Api
           Properties:
+            Auth:
+              Authorizer: NONE
             Path: /location
             Method: get
             RestApiId: !Ref ApiDeployment
