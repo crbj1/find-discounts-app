@@ -24,7 +24,7 @@ Resources:
       Cors:
         AllowCredentials: true
         AllowOrigin: "'http://localhost:4200'" 
-        AllowHeaders: "'Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, X-Amz-User-Agent'"
+        AllowHeaders: "'Content-Type, Authorization'"
 
   # Authorizer
   authorizer:
@@ -42,7 +42,7 @@ Resources:
     Properties:
       ResponseParameters:
         gatewayresponse.header.Access-Control-Allow-Origin: "'http://localhost:4200'"
-        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type, Authorization'"
       ResponseType: DEFAULT_4XX
       RestApiId:
         Ref: ApiDeployment
