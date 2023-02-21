@@ -22,7 +22,7 @@ export class JwtInterceptor implements HttpInterceptor {
       if (isAuthenticated) {
         this.cognitoService.getAccessToken()
         .then((token: string) => {
-          //this.logger.log("Token: " + token);
+          this.logger.log("Token: " + token);
           request = request.clone({
             setHeaders: {
               Authorization: token

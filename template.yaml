@@ -33,7 +33,8 @@ Resources:
       Cors:
         AllowCredentials: true
         AllowOrigin: "'http://localhost:4200'" 
-        AllowHeaders: "'Content-Type, Authorization'"
+        AllowHeaders: "'*'"
+        AllowMethods: "'*'"
 
   ApiCWLRoleArn:
     Type: AWS::ApiGateway::Account
@@ -75,11 +76,11 @@ Resources:
     Type: AWS::ApiGateway::GatewayResponse
     Properties:
       ResponseParameters:
-        gatewayresponse.header.Access-Control-Allow-Origin: "'http://localhost:4200'"
-        gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type, Authorization'"
-      ResponseType: DEFAULT_4XX
+        "gatewayresponse.header.Access-Control-Allow-Origin": "'http://localhost:4200'"
+        "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
+      ResponseType: "DEFAULT_4XX"
       RestApiId:
-        Ref: ApiDeployment
+        Ref: "ApiDeployment"
 
   createUser:
     Type: AWS::Serverless::Function
