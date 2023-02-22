@@ -28,13 +28,13 @@ export class ProfileComponent implements OnInit {
     this.cognitoService.getUser()
     .then((user: any) => {
       this.user = user.attributes;
-      this.logger.log("Getting REST user with id: " + this.user['custom:restId']);
+      //this.logger.log("Getting REST user with id: " + this.user['custom:restId']);
       this.restService.getUser(this.user['custom:restId'])
       .pipe(take(1))
       .subscribe({
         next: (restResponse: GetUserResponse) => {
           this.restUser = restResponse.Item;
-          this.logger.log("First name: " + this.restUser.firstName);
+          //this.logger.log("First name: " + this.restUser.firstName);
         },
         error: (err: any) => {
           this.logger.error(err);

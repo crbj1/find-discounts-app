@@ -73,12 +73,13 @@ export class SignUpComponent implements OnInit {
     this.restUser.streetAddress2 = this.f.streetAddress2.value;
     this.restUser.city = this.f.city.value;
     this.restUser.state = this.f.state.value;
+    this.restUser.zipCode = this.f.zipCode.value;
 
     this.restService.createUser(this.restUser)
     .pipe(first())
     .subscribe({
       next: (restUser: User) => {
-        this.logger.log('Newly created REST user: ' + restUser);
+        //this.logger.log('Newly created REST user: ' + restUser);
         this.user['custom:restId'] = restUser.userId;
         this.cognitoService.signUp(this.user)
         .then(() => {
@@ -98,25 +99,6 @@ export class SignUpComponent implements OnInit {
       }
     });
 
-  //   this.cognitoService.signUp(this.user)
-  //   .then(() => {
-  //     this.restService.createUser(this.restUser)
-  //     .pipe(first())
-  //     .subscribe({
-  //       next: (data) => {
-  //         this.logger.log('Newly created user: ' + data);
-  //       },
-  //       error: (error) => {
-  //         this.logger.error(error);
-  //         this.error = error;
-  //         this.loading = false;
-  //       }
-  //     });
-  //     this.loading = false;
-  //     this.isConfirm = true;
-  //   }).catch(() => {
-  //     this.loading = false;
-  //   });
   }
 
   public confirmSignUp(): void {

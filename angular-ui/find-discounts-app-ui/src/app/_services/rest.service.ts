@@ -38,6 +38,12 @@ export class RestService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
+  public updateUser(user: User): Observable<User> {
+    return this.http
+    .put<User>(`${environment.API_INVOKE_URL}/user-register/${user.userId}`, user)
+    .pipe(retry(1), catchError(this.handleError));
+  }
+
   public getLocations(): Observable<LocationDatabaseScan> {
     return this.http
     .get<LocationDatabaseScan>(`${environment.API_INVOKE_URL}/location`)

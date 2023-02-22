@@ -14,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RoutingModule } from './app-routing.module';
 import { AddLocationComponent } from './add-location/add-location.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AddLocationComponent } from './add-location/add-location.component';
     HomeComponent,
     PageNotFoundComponent,
     AddLocationComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
