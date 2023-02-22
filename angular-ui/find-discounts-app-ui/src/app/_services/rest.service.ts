@@ -11,6 +11,7 @@ import { User } from '../_models/user';
 import { Location } from '../_models/location';
 import { LocationDatabaseScan } from '../_models/locationDatabaseScan';
 import { UserDatabaseScan } from '../_models/userDatabaseScan';
+import { GetUserResponse } from '../_models/getUserResponse';
 
 @Injectable({ providedIn: 'root' })
 export class RestService {
@@ -25,9 +26,9 @@ export class RestService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
-  public getUser(id: number): Observable<User> {
+  public getUser(id: string): Observable<GetUserResponse> {
     return this.http
-    .get<User>(`${environment.API_INVOKE_URL}/user-register/${id}`)
+    .get<GetUserResponse>(`${environment.API_INVOKE_URL}/user-register/${id}`)
     .pipe(retry(1), catchError(this.handleError));
   }
 
@@ -43,7 +44,7 @@ export class RestService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
-  public getLocation(id: number): Observable<Location> {
+  public getLocation(id: string): Observable<Location> {
     return this.http
     .get<Location>(`${environment.API_INVOKE_URL}/location/${id}`)
     .pipe(retry(1), catchError(this.handleError));

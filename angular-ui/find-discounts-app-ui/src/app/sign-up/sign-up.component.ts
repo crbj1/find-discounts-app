@@ -79,10 +79,10 @@ export class SignUpComponent implements OnInit {
     .subscribe({
       next: (restUser: User) => {
         this.logger.log('Newly created REST user: ' + restUser);
-        this.user.restId = restUser.userId;
+        this.user['custom:restId'] = restUser.userId;
         this.cognitoService.signUp(this.user)
         .then(() => {
-          this.logger.log('Newly created Cognito user ' + this.user.restId);
+          this.logger.log('Newly created Cognito user ' + this.user['custom:restId']);
           this.loading = false;
           this.isConfirm = true;
         }).catch((error) => {
@@ -96,7 +96,7 @@ export class SignUpComponent implements OnInit {
         this.error = error;
         this.loading = false;
       }
-    })
+    });
 
   //   this.cognitoService.signUp(this.user)
   //   .then(() => {

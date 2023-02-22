@@ -27,7 +27,8 @@ export class JwtInterceptor implements HttpInterceptor {
             Authorization: jwt
           }
         });
-        this.logger.log("Cloned", with_auth_request);
+        //this.logger.log("jwt token: " + jwt);
+        //this.logger.log("Cloned", with_auth_request);
         return next.handle(with_auth_request);
       }),
       catchError((err) => {

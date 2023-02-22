@@ -11,7 +11,7 @@ export interface IUser {
   showPassword: boolean;
   code: string;
   name: string;
-  restId: string;
+  'custom:restId': string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -34,7 +34,7 @@ export class CognitoService {
       password: user.password,
       attributes: {
         email: user.email,
-        restId: user.restId
+        'custom:restId': user['custom:restId']
       },
       autoSignIn: {
         enabled: true
