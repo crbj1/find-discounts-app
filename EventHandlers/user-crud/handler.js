@@ -23,8 +23,9 @@ const send = (statusCode, data) => {
     };
 }
 
-module.exports.createUser = async (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false; //when callback is called, it is immediately executed
+module.exports.createUser = async (event, context) => {
+
+    //context.callbackWaitsForEmptyEventLoop = false; //when callback is called, it is immediately executed
     let data = JSON.parse(event.body);
     try {
         const uniqueRandomID = uuid.v4();
@@ -45,9 +46,22 @@ module.exports.createUser = async (event, context, callback) => {
             ConditionExpression: "attribute_not_exists(userId)"
         };
         await documentClient.put(params).promise();
-        callback(null, send(201, data));
+
+        // will add email as a single entry so you can't repeat emails
+        params = {
+            TableName: USER_TABLE_NAME,
+            Item: {
+                userId: data.email
+            },
+            ConditionExpression: "attribute_not_exists(userId)"
+        };
+        await documentClient.put(params).promise();
+        
+        //callback(null, send(201, data));
+        return send(201, data);
     } catch (err) {
-        callback(null, send(500, err.message));
+        //callback(null, send(500, err.message));
+        return send(500, err.message);
     }
 };
 
