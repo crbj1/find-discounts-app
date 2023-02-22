@@ -351,6 +351,10 @@ Resources:
     Properties:
       AutoVerifiedAttributes:
         - email
+      Schema:
+        - AttributeDataType: String
+          Name: restId
+          Required: true
       UserPoolName: !Join ["", ["find-discounts-", Ref: Stage, "-userpool"]]
 
   #User Pool Web Client
