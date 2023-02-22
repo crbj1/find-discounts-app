@@ -57,7 +57,7 @@ module.exports.createUser = async (event, context) => {
         };
         await documentClient.put(params).promise();
 
-        return send(201, data);
+        return send(201, params.Item);
 
     } catch (err) {
 

@@ -11,6 +11,7 @@ export interface IUser {
   showPassword: boolean;
   code: string;
   name: string;
+  restId: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -27,12 +28,16 @@ export class CognitoService {
   }
 
   public signUp(user: IUser): Promise<any> {
-    this.logger.log("Inside CognitoService:SignUp Function");
+    //this.logger.log("Inside CognitoService:SignUp Function");
     return Auth.signUp({
       username: user.email,
       password: user.password,
       attributes: {
-        email: user.email
+        email: user.email,
+        restId: user.restId
+      },
+      autoSignIn: {
+        enabled: true
       }
     });
   }
@@ -42,7 +47,7 @@ export class CognitoService {
   }
 
   public signIn(user: IUser): Promise<any> {
-    this.logger.log("Inside CognitoService:SignIn Function");
+    //this.logger.log("Inside CognitoService:SignIn Function");
     return Auth.signIn(user.email, user.password)
     .then(() => {
       this.logger.log("Sign In Succeeded");

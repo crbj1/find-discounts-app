@@ -74,25 +74,49 @@ export class SignUpComponent implements OnInit {
     this.restUser.city = this.f.city.value;
     this.restUser.state = this.f.state.value;
 
-    this.cognitoService.signUp(this.user)
-    .then(() => {
-      this.restService.createUser(this.restUser)
-      .pipe(first())
-      .subscribe({
-        next: (data) => {
-          this.logger.log('Newly created user: ' + data);
-        },
-        error: (error) => {
+    this.restService.createUser(this.restUser)
+    .pipe(first())
+    .subscribe({
+      next: (restUser: User) => {
+        this.logger.log('Newly created REST user: ' + restUser);
+        this.user.restId = restUser.userId;
+        this.cognitoService.signUp(this.user)
+        .then(() => {
+          this.logger.log('Newly created Cognito user ' + this.user.restId);
+          this.loading = false;
+          this.isConfirm = true;
+        }).catch((error) => {
           this.logger.error(error);
           this.error = error;
           this.loading = false;
-        }
-      });
-      this.loading = false;
-      this.isConfirm = true;
-    }).catch(() => {
-      this.loading = false;
-    });
+        });
+      },
+      error: (error) => {
+        this.logger.error(error);
+        this.error = error;
+        this.loading = false;
+      }
+    })
+
+  //   this.cognitoService.signUp(this.user)
+  //   .then(() => {
+  //     this.restService.createUser(this.restUser)
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: (data) => {
+  //         this.logger.log('Newly created user: ' + data);
+  //       },
+  //       error: (error) => {
+  //         this.logger.error(error);
+  //         this.error = error;
+  //         this.loading = false;
+  //       }
+  //     });
+  //     this.loading = false;
+  //     this.isConfirm = true;
+  //   }).catch(() => {
+  //     this.loading = false;
+  //   });
   }
 
   public confirmSignUp(): void {

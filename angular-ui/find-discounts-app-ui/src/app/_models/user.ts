@@ -1,8 +1,8 @@
 export interface User {
-    userId?: number;
+    userId?: string;
     firstName?: string;
     lastName?: string;
-    email: string;
+    email?: string;
     dateOfBirth?: Date;
     streetAddress1?: string;
     streetAddress2?: string;

@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
 import { Location } from '../_models/location';
 import { LocationDatabaseScan } from '../_models/locationDatabaseScan';
+import { UserDatabaseScan } from '../_models/userDatabaseScan';
 
 @Injectable({ providedIn: 'root' })
 export class RestService {
@@ -18,9 +19,9 @@ export class RestService {
 
   }
 
-  public getUsers(): Observable<User[]> {
+  public getUsers(): Observable<UserDatabaseScan> {
     return this.http
-    .get<User[]>(`${environment.API_INVOKE_URL}/user-register`)
+    .get<UserDatabaseScan>(`${environment.API_INVOKE_URL}/user-register`)
     .pipe(retry(1), catchError(this.handleError));
   }
 
