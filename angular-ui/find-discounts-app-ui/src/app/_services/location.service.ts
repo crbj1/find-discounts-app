@@ -6,6 +6,7 @@ import * as AWS from 'aws-sdk';
 
 import { environment } from 'src/environments/environment';
 import { Logger } from './logging.service';
+import { Location } from '../_models/location';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,8 @@ export class LocationService {
 
   constructor(private logger: Logger) { }
 
-  public async initializeMap() {
+  public async initializeMap(): Promise<void> {
 
-    this.logger.log("Starting initializeMap() function");
     const map = await AmazonLocation.createMap(
       {
         identityPoolId: environment.IDENTITY_POOL_ID
@@ -32,28 +32,44 @@ export class LocationService {
       }
     );
 
-    this.logger.log("Map created");
     map.addControl(new maplibregl.NavigationControl(), "top-left");
-    this.logger.log("Control added");
 
     this.map = map;
 
   }
 
-  public async addMarkerFromText(text: string) {
-    //Find the location and put a marker on the map
+  public async addMarker(restLocation: Location): Promise<maplibregl.Marker> {
+
+    //Get the location data from AWS
     const location = new AWS.Location({
       credentials: await AmazonLocation.getCredentialsForIdentityPool(environment.IDENTITY_POOL_ID),
       region: "us-east-1"
     });
-    this.logger.log("Location: " + location);
 
     const data = await location.searchPlaceIndexForText({
       IndexName: environment.INDEX_NAME,
-      Text: text
+      Text: restLocation.address
     }).promise();
 
+    this.logger.log("Location retrieved from AWS in country " + data.Results[0].Place.Country);
+
     const position = data.Results[0].Place.Geometry.Point;
-    return new maplibregl.Marker().setLngLat([position[0], position[1]]).addTo(this.map);
+
+    // create the popup
+    var popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+      `${restLocation.name}<br>${restLocation.address}`
+    );
+
+    // create DOM element for the marker
+    var el = document.createElement('div');
+    el.id = 'marker';
+
+    // create the marker
+    return new maplibregl.Marker(el)
+    .setLngLat([position[0], position[1]])
+    .setPopup(popup)
+    .addTo(this.map);
+
   }
+
 }

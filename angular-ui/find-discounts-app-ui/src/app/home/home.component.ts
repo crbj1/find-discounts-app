@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { first } from 'rxjs';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { take } from 'rxjs';
 
 import { LocationService } from '../_services/location.service';
 import { RestService } from '../_services/rest.service';
+import { Logger } from '../_services/logging.service';
 
 import { Location } from '../_models/location';
-import { Logger } from '../_services/logging.service';
 import { LocationDatabaseScan } from '../_models/locationDatabaseScan';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit{
@@ -19,18 +19,17 @@ export class HomeComponent implements OnInit{
   constructor (private locationService: LocationService, private restService: RestService, private logger: Logger) {
   }
 
-  ngOnInit(): void {
-    this.locationService.initializeMap();
+  async ngOnInit(): Promise<void> {
+    await this.locationService.initializeMap();
 
     this.restService.getLocations()
-    .pipe(first())
+    .pipe(take(1))
     .subscribe({
       next: (locationDatabaseScan: LocationDatabaseScan) => {
-        this.logger.log("Inside HomeComponent:this.restService.getLocations().subscribe.next");
         const locations = locationDatabaseScan.Items;
-        this.logger.log("Locations: " + locations.toString());
         locations.forEach((value: Location, index: number, array: Location[]) => {
-          this.locationService.addMarkerFromText(value.address);
+          //this.logger.log("Initializing marker with name " + value.name);
+          this.locationService.addMarker(value);
         });
       },
       error: (error) => {
