@@ -28,25 +28,27 @@ export class AddLocationComponent {
 
     this.cognitoService.getUser()
     .then((userInfo) => {
+
       this.location.createdByRestUserId = userInfo.attributes['custom:restId']
       this.logger.log("Created by user with REST id " + this.location.createdByRestUserId);
+
+      this.restService.createLocation(this.location)
+      .pipe(take(1))
+      .subscribe({
+        next: (data: Location) => {
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          this.logger.error(error);
+          this.loading = false;
+        }
+      });
+
     }).catch((reason: any) => {
       this.logger.error(reason);
+      this.loading = false;
     });
 
-    this.restService.createLocation(this.location)
-    .pipe(take(1))
-    .subscribe({
-      next: (data: Location) => {
-        this.logger.log('Newly created location: ' + data.name);
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        this.logger.error(error);
-        this.loading = false;
-      }
-    });
-    
   }
 
 }

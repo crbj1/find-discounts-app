@@ -38,7 +38,7 @@ module.exports.createLocation = async (event, context) => {
             ConditionExpression: "attribute_not_exists(locationId)"
         };
         await documentClient.put(params).promise();
-        return send(201, data);
+        return send(201, params.Item);
     } catch (err) {
         return send(500, err.message);
     }

@@ -58,7 +58,6 @@ export class LocationService {
 
     const position = data.Results[0].Place.Geometry.Point;
 
-    this.logger.log("Sending REST API request to get user with id " + restLocation.createdByRestUserId);
     this.restService.getUser(restLocation.createdByRestUserId)
     .pipe(take(1))
     .subscribe({
