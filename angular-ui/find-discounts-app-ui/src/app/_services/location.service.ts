@@ -7,6 +7,9 @@ import * as AWS from 'aws-sdk';
 import { environment } from 'src/environments/environment';
 import { Logger } from './logging.service';
 import { Location } from '../_models/location';
+import { RestService } from './rest.service';
+import { take } from 'rxjs';
+import { GetUserResponse } from '../_models/getUserResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +18,7 @@ export class LocationService {
 
   map: maplibregl.Map;
 
-  constructor(private logger: Logger) { }
+  constructor(private logger: Logger, private restService: RestService) { }
 
   public async initializeMap(): Promise<void> {
 
@@ -38,7 +41,7 @@ export class LocationService {
 
   }
 
-  public async addMarker(restLocation: Location): Promise<maplibregl.Marker> {
+  public async addMarker(restLocation: Location): Promise<void> {
 
     //Get the location data from AWS
     const location = new AWS.Location({
@@ -55,20 +58,34 @@ export class LocationService {
 
     const position = data.Results[0].Place.Geometry.Point;
 
-    // create the popup
-    var popup = new maplibregl.Popup({ offset: 25 }).setHTML(
-      `${restLocation.name}<br>${restLocation.address}`
-    );
+    this.logger.log("Sending REST API request to get user with id " + restLocation.createdByRestUserId);
+    this.restService.getUser(restLocation.createdByRestUserId)
+    .pipe(take(1))
+    .subscribe({
+      next: (response: GetUserResponse) => {
 
-    // create DOM element for the marker
-    var el = document.createElement('div');
-    el.id = 'marker';
+        // create the popup
+        var popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+        `${restLocation.name}
+        <br>${restLocation.address}
+        <br>Created by ${response.Item.firstName} ${response.Item.lastName}`
+        );
 
-    // create the marker
-    return new maplibregl.Marker(el)
-    .setLngLat([position[0], position[1]])
-    .setPopup(popup)
-    .addTo(this.map);
+        // create DOM element for the marker
+        var el = document.createElement('div');
+        el.id = 'marker';
+
+        // create the marker
+        new maplibregl.Marker(el)
+        .setLngLat([position[0], position[1]])
+        .setPopup(popup)
+        .addTo(this.map);
+
+      },
+      error: (err: any) => {
+        this.logger.error("Rest service failed to get user", err);
+      }
+    }); 
 
   }
 

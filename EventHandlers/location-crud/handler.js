@@ -23,8 +23,7 @@ const send = (statusCode, data) => {
     };
 }
 
-module.exports.createLocation = async (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false; //when callback is called, it is immediately executed
+module.exports.createLocation = async (event, context) => {
     let data = JSON.parse(event.body);
     try {
         const uniqueRandomID = uuid.v4();
@@ -39,14 +38,13 @@ module.exports.createLocation = async (event, context, callback) => {
             ConditionExpression: "attribute_not_exists(locationId)"
         };
         await documentClient.put(params).promise();
-        callback(null, send(201, data));
+        return send(201, data);
     } catch (err) {
-        callback(null, send(500, err.message));
+        return send(500, err.message);
     }
 };
 
-module.exports.updateLocation = async (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false;
+module.exports.updateLocation = async (event, context) => {
     let locationId = event.pathParameters.id;
     let data = JSON.parse(event.body);
     try {
@@ -65,14 +63,13 @@ module.exports.updateLocation = async (event, context, callback) => {
             ConditionExpression: 'attribute_exists(locationId)'
         };
         await documentClient.update(params).promise();
-        callback(null, send(200, data));
+        return send(200, data);
     } catch (err) {
-        callback(null, send(500, err.message));
+        return send(500, err.message);
     }
 };
 
-module.exports.deleteLocation = async (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false;
+module.exports.deleteLocation = async (event, context) => {
     let locationId = event.pathParameters.id;
     try {
         const params = {
@@ -81,14 +78,13 @@ module.exports.deleteLocation = async (event, context, callback) => {
             ConditionExpression: 'attribute_exists(locationId)'
         };
         await documentClient.delete(params).promise();
-        callback(null, send(200, locationId));
+        return send(200, locationId);
     } catch (err) {
-        callback(null, send(500, err.message));
+        return send(500, err.message);
     }
 };
 
-module.exports.getLocation = async (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false;
+module.exports.getLocation = async (event, context) => {
     let locationId = event.pathParameters.id;
     try {
         const params = {
@@ -97,21 +93,20 @@ module.exports.getLocation = async (event, context, callback) => {
             ConditionExpression: 'attribute_exists(locationId)'
         };
         const location = await documentClient.get(params).promise();
-        callback(null, send(200, location));
+        return send(200, location);
     } catch (err) {
-        callback(null, send(500, err.message));
+        return send(500, err.message);
     }
 };
 
-module.exports.getAllLocations = async (event, context, callback) => {
-    context.callbackWaitsForEmptyEventLoop = false;
+module.exports.getAllLocations = async (event, context) => {
     try {
         const params = {
             TableName: LOCATION_TABLE_NAME
         };
         const locations = await documentClient.scan(params).promise();
-        callback(null, send(200, locations));
+        return send(200, locations);
     } catch (err) {
-        callback(null, send(500, err.message));
+        return send(500, err.message);
     }
 };

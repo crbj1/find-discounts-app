@@ -46,6 +46,7 @@ export class AddLocationComponent {
         this.loading = false;
       }
     });
+    
   }
 
 }
