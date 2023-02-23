@@ -33,7 +33,8 @@ module.exports.createLocation = async (event, context, callback) => {
             Item: {
                 locationId: uniqueRandomID,
                 name: data.name,
-                address: data.address
+                address: data.address,
+                createdByRestUserId: data.createdByRestUserId
             },
             ConditionExpression: "attribute_not_exists(locationId)"
         };
