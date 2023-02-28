@@ -20,7 +20,8 @@ export class HomeComponent implements OnInit{
   }
 
   async ngOnInit(): Promise<void> {
-    await this.locationService.initializeMap();
+    
+    await Promise.all([this.locationService.initializeMap(), this.locationService.setCurrentUserRestId()]);
 
     this.restService.getLocations()
     .pipe(take(1))
@@ -33,7 +34,7 @@ export class HomeComponent implements OnInit{
         });
       },
       error: (error) => {
-        this.logger.error(error);
+        this.logger.error("Failed to get locations", error);
       }
     });
     

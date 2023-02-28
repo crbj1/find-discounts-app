@@ -27,7 +27,7 @@ export class EditProfileComponent implements OnInit {
   State: any = ['AK', 'AL', 'AR', 'AS', 'AZ', 'CA', 'CM', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'GU', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TT', 'TX', 'UT', 'VA', 'VI', 'VT', 'WA', 'WI', 'WV', 'WY'];
 
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private cognitoService: CognitoService, private restService: RestService, private logger: Logger) {
-    this.loading = false;
+    this.loading = true;
     this.submitted = false;
     this.user = {} as IUser;
     this.restUser = {} as User;
@@ -44,9 +44,11 @@ export class EditProfileComponent implements OnInit {
         next: (restResponse: GetUserResponse) => {
           this.restUser = restResponse.Item;
           this.logger.log("First name: " + this.restUser.firstName);
+          this.loading = false;
         },
         error: (err: any) => {
-          this.logger.error(err);
+          this.logger.error("Couldn't get user from AWS ", err);
+          this.router.navigate(['/profile']);
         }
       });
     });

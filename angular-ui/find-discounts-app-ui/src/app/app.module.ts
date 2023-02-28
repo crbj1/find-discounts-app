@@ -15,6 +15,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RoutingModule } from './app-routing.module';
 import { AddLocationComponent } from './add-location/add-location.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { EditMarkerComponent } from './edit-marker/edit-marker.component';
+import { DeleteMarkerComponent } from './delete-marker/delete-marker.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
     PageNotFoundComponent,
     AddLocationComponent,
     EditProfileComponent,
+    EditMarkerComponent,
+    DeleteMarkerComponent,
   ],
   imports: [
     BrowserModule,

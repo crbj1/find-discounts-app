@@ -12,6 +12,7 @@ import { Location } from '../_models/location';
 import { LocationDatabaseScan } from '../_models/locationDatabaseScan';
 import { UserDatabaseScan } from '../_models/userDatabaseScan';
 import { GetUserResponse } from '../_models/getUserResponse';
+import { GetLocationResponse } from '../_models/getLocationResponse';
 
 @Injectable({ providedIn: 'root' })
 export class RestService {
@@ -50,15 +51,27 @@ export class RestService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
-  public getLocation(id: string): Observable<Location> {
+  public getLocation(id: string): Observable<GetLocationResponse> {
     return this.http
-    .get<Location>(`${environment.API_INVOKE_URL}/location/${id}`)
+    .get<GetLocationResponse>(`${environment.API_INVOKE_URL}/location/${id}`)
     .pipe(retry(1), catchError(this.handleError));
   }
 
   public createLocation(location: Location): Observable<Location> {
     return this.http
     .post<Location>(`${environment.API_INVOKE_URL}/location`, location)
+    .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public updateLocation(location: Location): Observable<Location> {
+    return this.http
+    .put<Location>(`${environment.API_INVOKE_URL}/location/${location.locationId}`, location)
+    .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public deleteLocation(id: string): Observable<string> {
+    return this.http
+    .delete<string>(`${environment.API_INVOKE_URL}/location/${id}`)
     .pipe(retry(1), catchError(this.handleError));
   }
 

@@ -1,0 +1,11 @@
+<div class="alert alert-danger" role="alert">
+    Warning! Are you sure you want to delete this location?
+    <br>
+    <button type="button" class="btn btn-warning btn-lg" (click)="deleteLocation()" [disabled]="loading">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
+        Delete
+    </button>
+    <button type="button" class="btn btn-secondary btn-lg" (click)="returnHome()" [disabled]="loading">
+        Cancel
+    </button>
+</div>

@@ -8,17 +8,36 @@ import { environment } from 'src/environments/environment';
 import { Logger } from './logging.service';
 import { Location } from '../_models/location';
 import { RestService } from './rest.service';
-import { take } from 'rxjs';
+import { Observable, Subscription, take } from 'rxjs';
 import { GetUserResponse } from '../_models/getUserResponse';
+import { CognitoService } from './cognito.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
 
-  map: maplibregl.Map;
+  private map: maplibregl.Map;
+  private markers: Map<string, maplibregl.Marker>;
+  private currentUserRestId: string
 
-  constructor(private logger: Logger, private restService: RestService) { }
+  constructor(private logger: Logger, private restService: RestService, private cognitoService: CognitoService) {
+    this.markers = new Map<string, maplibregl.Marker>();
+    this.currentUserRestId = '';
+  }
+
+  public getMarkers(): Map<string, maplibregl.Marker> {
+    return this.markers;
+  }
+
+  public removeMarkerFromList(key: string) {
+    this.markers.delete(key);
+  }
+
+  public async setCurrentUserRestId(): Promise<void> {
+    const user = await this.cognitoService.getUser();
+    this.currentUserRestId = user.attributes['custom:restId'];
+  }
 
   public async initializeMap(): Promise<void> {
 
@@ -54,7 +73,7 @@ export class LocationService {
       Text: restLocation.address
     }).promise();
 
-    this.logger.log("Location retrieved from AWS in country " + data.Results[0].Place.Country);
+    //this.logger.log("Location retrieved from AWS in country " + data.Results[0].Place.Country);
 
     const position = data.Results[0].Place.Geometry.Point;
 
@@ -63,27 +82,48 @@ export class LocationService {
     .subscribe({
       next: (response: GetUserResponse) => {
 
+        var idsMatch: boolean = false;
+        if (this.currentUserRestId === response.Item.userId) {
+          idsMatch = true;
+        }
+
         // create the popup
-        var popup = new maplibregl.Popup({ offset: 25 }).setHTML(
-        `${restLocation.name}
-        <br>${restLocation.address}
-        <br>Created by ${response.Item.firstName} ${response.Item.lastName}`
-        );
+        var popup: maplibregl.Popup;
+        if (idsMatch) {
+          popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+            `<p>${restLocation.name}
+            <br>${restLocation.address}
+            <br>Created by ${response.Item.firstName} ${response.Item.lastName}</p>
+            <p>
+              <a href="/home/edit/${restLocation.locationId}" class="nav-link">Edit Location</a>
+              <a href="/home/delete/${restLocation.locationId}" class="nav-link">Delete Location</a>
+            </p>`
+          );
+        } else {
+          popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+            `<p>${restLocation.name}</p>
+            <p>${restLocation.address}</p>
+            <p>Created by ${response.Item.firstName} ${response.Item.lastName}</p>`
+          );
+        }
 
         // create DOM element for the marker
         var el = document.createElement('div');
         el.id = 'marker';
 
         // create the marker
-        new maplibregl.Marker(el)
+        const marker = new maplibregl.Marker(el)
         .setLngLat([position[0], position[1]])
         .setPopup(popup)
         .addTo(this.map);
+
+        this.markers.set(restLocation.locationId, marker);
 
       },
       error: (err: any) => {
         this.logger.error("Rest service failed to get user", err);
       }
+
     }); 
 
   }

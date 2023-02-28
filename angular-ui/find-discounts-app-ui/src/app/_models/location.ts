@@ -1,5 +1,5 @@
 export interface Location {
-    locationId?: number;
+    locationId?: string;
     address: string;
     name?: string;
     createdByRestUserId?: string;
