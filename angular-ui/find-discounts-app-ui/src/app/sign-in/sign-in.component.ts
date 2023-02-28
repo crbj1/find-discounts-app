@@ -13,6 +13,7 @@ export class SignInComponent {
 
   loading: boolean;
   user: IUser;
+  error = '';
 
   constructor(private router: Router, private cognitoService: CognitoService, private route: ActivatedRoute, private logger: Logger) {
     this.loading = false;
@@ -24,7 +25,6 @@ export class SignInComponent {
     this.cognitoService.signIn(this.user)
     .then(() => {
 
-      this.logger.log("Inside SignInComponent:SignIn Function: this.cognitoservice.signIn.then()");
       this.route.queryParams.subscribe(params => {
 
         if (params.returnUrl) {
@@ -46,6 +46,7 @@ export class SignInComponent {
     }).catch((error) => {
       this.logger.log("Login failed");
       this.logger.log(error);
+      this.error = error;
       this.loading = false;
     });
   }
