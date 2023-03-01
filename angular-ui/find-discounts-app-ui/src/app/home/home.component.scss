@@ -1,4 +1,12 @@
-@import "https://unpkg.com/maplibre-gl@1/dist/maplibre-gl.css";
+@import "https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css";
+
+#map {
+    height: 90%;
+    min-height: 675px;
+    width: 100%;
+    min-width: 650px;
+    margin: auto;
+}
 
 #marker {
     background-image: url(/assets/IBM_BeeLogo_BlackandWhite.png);
