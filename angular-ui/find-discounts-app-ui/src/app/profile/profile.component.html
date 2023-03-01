@@ -1,8 +1,30 @@
 <div class="row justify-content-center my-5">
-    <h1>Profile Information for user with email {{ user.email }}</h1>
-    <div class="col-4">  
+    <div class="col-4" *ngIf="deleteButtonClicked">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-4">Warning!</h1>
+                <p class="lead">You are about to delete your entire account and all information associated with it!</p>
+                <form>
+                    <div class="form-group">
+                        <label for="email">To continue, enter your email</label>
+                        <input type="email" class="form-control" id="email" name="email" #email="ngModel" [(ngModel)]="inputEmail">
+                    </div>
+                    <button type="submit" class="btn btn-danger" (click)="deleteAccount()">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" *ngIf="loading"></span>
+                        Delete
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="unclickDeleteButton()">Cancel</button>
+                    <div *ngIf="inputError" class="alert alert-danger mt-3 mb-0">{{inputError}}</div>
+                </form> 
+            </div>
+        </div>
+    </div>
+    <div class="col-4" *ngIf="!deleteButtonClicked">  
+        <h1>Profile Information for user with email {{ user.email }}</h1>
         <h2>
             <a class="nav-link link-primary" routerLink="/editProfile" routerLinkActive="active">Edit profile</a>
+            <button type="button" class="btn btn-danger" (click)="clickDeleteButton()">Delete account</button>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </h2>
         <table class="table table-striped">
             <tbody>

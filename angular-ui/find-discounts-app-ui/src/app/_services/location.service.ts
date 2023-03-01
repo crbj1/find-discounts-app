@@ -81,10 +81,12 @@ export class LocationService {
     .pipe(take(1))
     .subscribe({
       next: (response: GetUserResponse) => {
-
+        
         var idsMatch: boolean = false;
-        if (this.currentUserRestId === response.Item.userId) {
-          idsMatch = true;
+        if (Object.keys(response).length !== 0) {
+          if (this.currentUserRestId === response.Item.userId) {
+            idsMatch = true;
+          }
         }
 
         // create the popup
@@ -95,15 +97,21 @@ export class LocationService {
             <br>${restLocation.address}
             <br>Created by ${response.Item.firstName} ${response.Item.lastName}</p>
             <p>
-              <a href="/home/edit/${restLocation.locationId}" class="nav-link">Edit Location</a>
-              <a href="/home/delete/${restLocation.locationId}" class="nav-link">Delete Location</a>
+              <a href="/home/edit/${restLocation.locationId}" class="nav-link" style="color: blue">Edit Location</a>
+              <a href="/home/delete/${restLocation.locationId}" class="nav-link" style="color: blue">Delete Location</a>
             </p>`
+          );
+        } else if (Object.keys(response).length !== 0){
+          popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+            `<p>${restLocation.name}</p>
+            <p>${restLocation.address}</p>
+            <p>Created by ${response.Item.firstName} ${response.Item.lastName}</p>`
           );
         } else {
           popup = new maplibregl.Popup({ offset: 25 }).setHTML(
             `<p>${restLocation.name}</p>
             <p>${restLocation.address}</p>
-            <p>Created by ${response.Item.firstName} ${response.Item.lastName}</p>`
+            <p>Created by unknown</p>`
           );
         }
 
@@ -120,10 +128,10 @@ export class LocationService {
         this.markers.set(restLocation.locationId, marker);
 
       },
-      error: (err: any) => {
-        this.logger.error("Rest service failed to get user", err);
+      error: (err: any) => { //User does not exist
+        this.logger.error("Failed to get REST User");
+        this.logger.error(err);
       }
-
     }); 
 
   }

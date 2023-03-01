@@ -55,7 +55,7 @@ export class CognitoService {
     });
   }
 
-  public signOut(): Promise<any> {
+  public signOut(): Promise<void> {
     return Auth.signOut({ global: true })
     .then(() => {
       this.authenticationSubject.next(false);
@@ -96,6 +96,16 @@ export class CognitoService {
 
   public getCurrentSession() {
     return Auth.currentSession();
+  }
+
+  public async deleteUser(): Promise<void> {
+    try {
+      const result = await Auth.deleteUser();
+      console.log(result);
+      this.authenticationSubject.next(false);
+    } catch (error) {
+      console.log('Error deleting user', error);
+    }
   }
   
 }

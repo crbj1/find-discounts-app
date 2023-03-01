@@ -45,6 +45,12 @@ export class RestService {
     .pipe(retry(1), catchError(this.handleError));
   }
 
+  public deleteUser(id: string): Observable<string> {
+    return this.http
+    .delete<string>(`${environment.API_INVOKE_URL}/user-register/${id}`)
+    .pipe(catchError(this.handleError));
+  }
+
   public getLocations(): Observable<LocationDatabaseScan> {
     return this.http
     .get<LocationDatabaseScan>(`${environment.API_INVOKE_URL}/location`)

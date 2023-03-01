@@ -106,25 +106,14 @@ module.exports.updateUser = async (event, context) => {
 
 module.exports.deleteUser = async (event, context) => {
     let userId = event.pathParameters.id;
-    let data = JSON.parse(event.body);
     try {
-
         const params = {
             TableName: USER_TABLE_NAME,
             Key: { userId },
             ConditionExpression: 'attribute_exists(userId)'
         };
         await documentClient.delete(params).promise();
-
-        const params2 = {
-            TableName: USER_TABLE_NAME,
-            Key: { userId: data.email },
-            ConditionExpression: 'attribute_exists(userId)'
-        };
-        await documentClient.delete(params2).promise();
-
         return send(200, userId);
-
     } catch (err) {
         return send(500, err.message);
     }

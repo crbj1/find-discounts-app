@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { first, take } from 'rxjs';
+import { Router } from '@angular/router';
+import { first, firstValueFrom, take } from 'rxjs';
 import { GetUserResponse } from '../_models/getUserResponse';
 import { User } from '../_models/user';
 
@@ -17,11 +18,17 @@ export class ProfileComponent implements OnInit {
   loading: boolean;
   user: IUser;
   restUser: User;
+  deleteButtonClicked: boolean;
+  error = '';
+  inputEmail: string;
+  inputError = '';
 
-  constructor(private cognitoService: CognitoService, private restService: RestService, private logger: Logger) {
+  constructor(private cognitoService: CognitoService, private restService: RestService, private router: Router, private logger: Logger) {
     this.loading = false;
     this.user = {} as IUser;
     this.restUser = {} as User;
+    this.deleteButtonClicked = false;
+    this.inputEmail = '';
   }
 
   public ngOnInit(): void {
@@ -41,6 +48,53 @@ export class ProfileComponent implements OnInit {
         }
       });
     });
+  }
+
+  clickDeleteButton() {
+    this.deleteButtonClicked = true;
+  }
+
+  unclickDeleteButton() {
+    this.deleteButtonClicked = false;
+  }
+
+  deleteAccount() {
+    this.loading = true;
+
+    if (this.inputEmail !== this.restUser.email) {
+      this.inputError = "Emails don't match.";
+      this.loading = false;
+      return;
+    }
+
+    this.restService.deleteUser(this.restUser.userId)
+    .pipe(first())
+    .subscribe({
+      next: (value: string) => {
+        this.logger.log("Deleted REST user with id " + value);
+        //delete extra email entry (allows usernames to stay unique)
+        this.restService.deleteUser(this.restUser.email)
+        .pipe(first())
+        .subscribe({
+          next: async (value: string) => {
+            this.logger.log("Deleted REST user with id " + value);
+            await this.cognitoService.deleteUser();
+            this.router.navigate(['/signIn']);
+          },
+          error: (err: any) => {
+            this.error = "Failed to delete REST user (email entry)";
+            this.loading = false;
+            this.unclickDeleteButton();
+          }
+        });
+      },
+      error: (err: any) => {
+        this.error = "Failed to delete REST user";
+        this.loading = false;
+        this.unclickDeleteButton();
+      }
+    });
+
   }
 
 }
