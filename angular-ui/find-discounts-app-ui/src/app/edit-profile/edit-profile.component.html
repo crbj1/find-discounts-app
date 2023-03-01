@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-body">
                 <form [formGroup]="updateProfileForm" (ngSubmit)="updateUser()">
-                    <div class="form-group">
+                    <div class="form-group required">
                         <div class="col mb-2">
-                            <label for="firstName" class="form-label">First name:</label>
-                            <input type="text" value="{{restUser.firstName}}" id="firstName" name="firstName" formControlName="firstName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
+                            <label for="firstName" class="control-label">First name:</label>
+                            <input type="text" id="firstName" name="firstName" formControlName="firstName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }">
                             <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
                                 <div *ngIf="f.firstName.errors.required">First name is required.</div>
                                 <div *ngIf="f.firstName.errors.minLength">First name must be at least 2 characters</div>
@@ -14,10 +14,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <div class="col mb-2">
-                            <label for="lastName" class="form-label">Last name:</label>
-                            <input type="text" value="{{restUser.lastName}}" id="lastName" name="lastName" formControlName="lastName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
+                            <label for="lastName" class="control-label">Last name:</label>
+                            <input type="text" id="lastName" name="lastName" formControlName="lastName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }">
                             <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
                                 <div *ngIf="f.lastName.errors.required">Last name is required.</div>
                                 <div *ngIf="f.lastName.errors.minLength">Last name must be at least 2 characters</div>
@@ -25,10 +25,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <div class="col mb-2">
-                            <label for="dateOfBirth" class="form-label">Date of Birth:</label>
-                            <input type="date" value="{{restUser.dateOfBirth}}" id="dateOfBirth" name="dateOfBirth" formControlName="dateOfBirth" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.dateOfBirth.errors }">
+                            <label for="dateOfBirth" class="control-label">Date of Birth:</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" formControlName="dateOfBirth" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.dateOfBirth.errors }">
                             <div *ngIf="submitted && f.dateOfBirth.errors" class="invalid-feedback">
                                 <div *ngIf="f.dateOfBirth.errors.required">Date of Birth is required.</div>
                             </div>
@@ -36,8 +36,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col mb-2">
-                            <label for="streetAddress1" class="form-label">Street Address 1:</label>
-                            <input type="text" value="{{restUser.streetAddress1}}" id="streetAddress1" name="streetAddress1" formControlName="streetAddress1" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.streetAddress1.errors }">
+                            <label for="streetAddress1" class="control-label">Street Address 1:</label>
+                            <input type="text" id="streetAddress1" name="streetAddress1" formControlName="streetAddress1" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.streetAddress1.errors }">
                             <div *ngIf="submitted && f.streetAddress1.errors" class="invalid-feedback">
                                 <div *ngIf="f.streetAddress1.errors.maxLength">Street Address 1 cannot exceed 50 characters.</div>
                             </div>
@@ -45,8 +45,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col mb-2">
-                            <label for="streetAddress2" class="form-label">Street Address 2:</label>
-                            <input type="text" value="{{restUser.streetAddress2}}" id="streetAddress2" name="streetAddress2" formControlName="streetAddress2" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.streetAddress2.errors }">
+                            <label for="streetAddress2" class="control-label">Street Address 2:</label>
+                            <input type="text" id="streetAddress2" name="streetAddress2" formControlName="streetAddress2" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.streetAddress2.errors }">
                             <div *ngIf="submitted && f.streetAddress2.errors" class="invalid-feedback">
                                 <div *ngIf="f.streetAddress2.errors.maxLength">Street Address 2 cannot exceed 50 characters.</div>
                             </div>
@@ -54,8 +54,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col mb-2">
-                            <label for="city" class="form-label">City:</label>
-                            <input type="text" value="{{restUser.city}}" id="city" name="city" formControlName="city" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.city.errors }">
+                            <label for="city" class="control-label">City:</label>
+                            <input type="text" id="city" name="city" formControlName="city" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.city.errors }">
                             <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
                                 <div *ngIf="f.city.errors.maxLength">City cannot exceed 50 characters.</div>
                             </div>
@@ -63,8 +63,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col mb-2">
-                            <label for="state" class="form-label">State: </label>
-                            <select formControlName="state" class="custom-select">
+                            <label for="state" class="form-label">State:</label>
+                            <select formControlName="state" class="form-select form-select-sm">
                                 <option value="" disabled>Choose your state</option>
                                 <option *ngFor="let state of State" [ngValue]="state" [selected]="state === restUser.state">{{state}}</option>
                             </select>
@@ -72,8 +72,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col mb-2">
-                            <label for="zipCode" class="form-label">Zip Code:</label>
-                            <input type="text" value="{{restUser.zipCode}}" id="zipCode" name="zipCode" formControlName="zipCode" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.zipCode.errors }">
+                            <label for="zipCode" class="control-label">Zip Code:</label>
+                            <input type="text" id="zipCode" name="zipCode" formControlName="zipCode" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && f.zipCode.errors }">
                             <div *ngIf="submitted && f.zipCode.errors" class="invalid-feedback">
                                 <div *ngIf="f.zipCode.errors.minLength">Zip Code must be at least 5 characters</div>
                                 <div *ngIf="f.zipCode.errors.maxLength">Zip Code cannot exceed 9 characters.</div>

@@ -33,25 +33,7 @@ export class EditProfileComponent implements OnInit {
     this.restUser = {} as User;
   }
 
-  ngOnInit(): void {
-
-    this.cognitoService.getUser()
-    .then((user: any) => {
-      this.user = user.attributes;
-      this.restService.getUser(this.user['custom:restId'])
-      .pipe(take(1))
-      .subscribe({
-        next: (restResponse: GetUserResponse) => {
-          this.restUser = restResponse.Item;
-          this.logger.log("First name: " + this.restUser.firstName);
-          this.loading = false;
-        },
-        error: (err: any) => {
-          this.logger.error("Couldn't get user from AWS ", err);
-          this.router.navigate(['/profile']);
-        }
-      });
-    });
+  async ngOnInit(): Promise<void> {
 
     this.updateProfileForm = this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(35)]],
@@ -62,6 +44,32 @@ export class EditProfileComponent implements OnInit {
       city: ['', [Validators.maxLength(50)]],
       state: ['', []],
       zipCode: ['', [Validators.minLength(5), Validators.maxLength(9)]]
+    });
+
+    const cognitoUser = await this.cognitoService.getUser();
+    this.user = cognitoUser.attributes;
+
+    this.restService.getUser(this.user['custom:restId'])
+    .pipe(take(1))
+    .subscribe({
+      next: (restResponse: GetUserResponse) => {
+        this.restUser = restResponse.Item;
+        
+        this.updateProfileForm.get("firstName").setValue(this.restUser.firstName);
+        this.updateProfileForm.get("lastName").setValue(this.restUser.lastName);
+        this.updateProfileForm.get("dateOfBirth").setValue(this.restUser.dateOfBirth);
+        this.updateProfileForm.get("streetAddress1").setValue(this.restUser.streetAddress1);
+        this.updateProfileForm.get("streetAddress2").setValue(this.restUser.streetAddress2);
+        this.updateProfileForm.get("city").setValue(this.restUser.city);
+        this.updateProfileForm.get("zipCode").setValue(this.restUser.zipCode);
+
+        this.loading = false;
+      },
+      error: (err: any) => {
+        this.logger.error("Couldn't get user from AWS ");
+        this.logger.error(err);
+        this.router.navigate(['/profile']);
+      }
     });
 
   }
