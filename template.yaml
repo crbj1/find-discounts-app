@@ -54,7 +54,7 @@ Resources:
               - "."
               - - !Ref ApiDeployment
                 - "execute-api"
-                - ${aws:region}
+                - "us-east-1"
                 - "amazonaws.com"
             CustomOriginConfig:
               OriginProtocolPolicy: https-only
