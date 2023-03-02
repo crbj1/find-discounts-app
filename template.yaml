@@ -11,6 +11,54 @@ Globals:
     Runtime: nodejs14.x
 
 Resources:
+
+  # Cache policy
+  restAPICachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        DefaultTTL: 300
+        MaxTTL: 31536000
+        MinTTL: 60
+        Name: RestAPICachePolicy
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          HeadersConfig:
+            HeaderBehavior: whitelist
+            Headers:
+              - Authorization
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  # Cloudfront distribution
+  cloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultCacheBehavior:
+          TargetOriginId: restAPIOrigin
+          CachePolicyId: !Ref restAPICachePolicy
+          ViewerProtocolPolicy: https-only
+        CacheBehavior:
+          - PathPattern: /dev/*
+            TargetOriginId: restAPIOrigin
+            CachePolicyId: !Ref restAPICachePolicy
+            ViewerProtocolPolicy: https-only
+        Origins:
+          - Id: restAPIOrigin
+            DomainName: !Join
+              - "."
+              - - !Ref ApiDeployment
+                - "execute-api"
+                - ${aws:region}
+                - "amazonaws.com"
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+
   #API Gateway
   ApiDeployment:
     Type: AWS::Serverless::Api
