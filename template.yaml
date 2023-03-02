@@ -43,7 +43,7 @@ Resources:
           TargetOriginId: restAPIOrigin
           CachePolicyId: !Ref restAPICachePolicy
           ViewerProtocolPolicy: https-only
-        CacheBehavior:
+        CacheBehaviors:
           - PathPattern: /dev/*
             TargetOriginId: restAPIOrigin
             CachePolicyId: !Ref restAPICachePolicy
