@@ -544,3 +544,12 @@ Resources:
               - s3:GetObject
             Resource:
               - !Join ["", ["arn:aws:s3:::", !Ref angularFrontEndS3Bucket, "/*"]]
+          - Sid: AddPermissionForSync
+            Effect: Allow
+            Principal:
+              AWS: "748870887425"
+            Action:
+              - s3:ListBucket
+              - s3:PutObject
+            Resource:
+              - !Join ["", ["arn:aws:s3:::", !Ref angularFrontEndS3Bucket, "/*"]]
