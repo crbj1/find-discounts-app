@@ -9,12 +9,18 @@ phases:
     commands:
       - pip3 install --upgrade aws-sam-cli
       - sam --version
+      - npm install -g @angular/cli
       - cd EventHandlers
+      - npm install
+      - cd ..
+      - cd angular-ui/find-discounts-app-ui
       - npm install
 
   pre_build:
     on-failure: ABORT
     commands:
+      - cd ../..
+      - cd EventHandlers
       - npm run test
 
   build:
@@ -22,11 +28,16 @@ phases:
     commands:
       - cd ..
       - sam build --parameter-overrides "ParameterKey=Stage,ParameterValue=dev"
+      - cd angular-ui/find-discounts-app-ui
+      - ng build
 
   post_build:
     on-failure: ABORT
     commands:
+      - cd ../..
       - sam package --s3-bucket $PACKAGE_BUCKET --output-template-file packaged.yaml
+      - cd angular-ui/find-discounts-app-ui/dist
+      - s3 cp find-discounts-app-ui s3://find-discounts-app-angularfrontends3bucket-11i37o0go93ho
 
 artifacts:
   discard-paths: yes

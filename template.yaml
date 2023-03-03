@@ -507,3 +507,30 @@ Resources:
       IdentityPoolId: !Ref IdentityPool
       Roles:
         unauthenticated: !GetAtt CognitoUnauthorizedRole.Arn
+
+  # Angular
+  angularFrontEndS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      # BucketName: myangulars3bucket
+      WebsiteConfiguration:
+        ErrorDocument: index.html
+        IndexDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
+
+  angularFrontEndS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref angularFrontEndS3Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AddPermission
+            Effect: Allow
+            Principal: "*"
+            Action:
+              - s3:GetObject
+            Resource:
+              - !Join ["", ["arn:aws:s3:::", !Ref angularFrontEndS3Bucket, "/*"]]
