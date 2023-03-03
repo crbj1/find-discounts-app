@@ -5,7 +5,7 @@ phases:
   install:
     on-failure: ABORT
     runtime-versions:
-      nodejs: 14
+      nodejs: 14.x
     commands:
       - pip3 install --upgrade aws-sam-cli
       - sam --version
