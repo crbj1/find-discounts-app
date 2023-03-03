@@ -36,8 +36,8 @@ phases:
     commands:
       - cd ../..
       - sam package --s3-bucket $PACKAGE_BUCKET --output-template-file packaged.yaml
-      - cd angular-ui/find-discounts-app-ui/dist
-      - aws s3 cp find-discounts-app-ui s3://find-discounts-app-angularfrontends3bucket-11i37o0go93ho
+      - cd angular-ui/find-discounts-app-ui/dist/find-discounts-app-ui
+      - aws s3 sync . s3://find-discounts-app-angularfrontends3bucket-11i37o0go93ho
 
 artifacts:
   discard-paths: yes

@@ -80,7 +80,7 @@ Resources:
             FunctionArn: !GetAtt authorizer.Arn
       Cors:
         AllowCredentials: true
-        AllowOrigin: "'http://localhost:4200'" 
+        AllowOrigin: !GetAtt angularFrontEndS3Bucket.WebsiteURL 
         AllowHeaders: "'*'"
         AllowMethods: "'*'"
 
@@ -139,6 +139,7 @@ Resources:
         Variables:
           USER_TABLE_NAME: !Ref userTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -164,6 +165,7 @@ Resources:
         Variables:
           USER_TABLE_NAME: !Ref userTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -187,6 +189,7 @@ Resources:
         Variables:
           USER_TABLE_NAME: !Ref userTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -210,6 +213,7 @@ Resources:
         Variables:
           USER_TABLE_NAME: !Ref userTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -233,6 +237,7 @@ Resources:
         Variables:
           USER_TABLE_NAME: !Ref userTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -270,6 +275,7 @@ Resources:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -295,6 +301,7 @@ Resources:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -318,6 +325,7 @@ Resources:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -341,6 +349,7 @@ Resources:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow
@@ -364,6 +373,7 @@ Resources:
         Variables:
           LOCATION_TABLE_NAME: !Ref locationTable
           AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+          FRONTEND_ANGULAR_APP_URL: !GetAtt angularFrontEndS3Bucket.WebsiteURL
       Policies:
         - Statement:
             - Effect: Allow

@@ -11,12 +11,13 @@ const documentClient = new DynamoDB.DocumentClient({
 });
 
 const LOCATION_TABLE_NAME = process.env.LOCATION_TABLE_NAME;
+const FRONTEND_ANGULAR_APP_URL = process.env.FRONTEND_ANGULAR_APP_URL;
 
 const send = (statusCode, data) => {
     return {
         statusCode,
         headers: {
-            "Access-Control-Allow-Origin": "http://localhost:4200",
+            "Access-Control-Allow-Origin": FRONTEND_ANGULAR_APP_URL,
             "Access-Control-Allow-Credentials": true
         },
         body: JSON.stringify(data)
