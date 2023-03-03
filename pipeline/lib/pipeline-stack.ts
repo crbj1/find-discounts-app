@@ -1,13 +1,20 @@
 // lib/pipeline-stack.ts
 
-import * as cdk from '@aws-cdk/core';
-import s3 = require('@aws-cdk/aws-s3');
-import codepipeline = require('@aws-cdk/aws-codepipeline');
-import codepipeline_actions = require('@aws-cdk/aws-codepipeline-actions');
-import codebuild = require('@aws-cdk/aws-codebuild');
+//import * as cdk from '@aws-cdk/core';
+//import s3 = require('@aws-cdk/aws-s3');
+//import codepipeline = require('@aws-cdk/aws-codepipeline');
+//import codepipeline_actions = require('@aws-cdk/aws-codepipeline-actions');
+//import codebuild = require('@aws-cdk/aws-codebuild');
 
-export class PipelineStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+import { Construct } from 'constructs';
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { aws_s3 as s3} from 'aws-cdk-lib';
+import { aws_codepipeline as codepipeline} from 'aws-cdk-lib';
+import { aws_codepipeline_actions as codepipeline_actions} from 'aws-cdk-lib';
+import { aws_codebuild as codebuild } from 'aws-cdk-lib';
+
+export class PipelineStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // The code that defines your stack goes here
@@ -41,7 +48,7 @@ export class PipelineStack extends cdk.Stack {
       // buildSpec?:
       concurrentBuildLimit: 1,
       environment: {
-        buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
+        buildImage: codebuild.LinuxBuildImage.STANDARD_6_0,
         computeType: codebuild.ComputeType.SMALL
       },
       environmentVariables: {
