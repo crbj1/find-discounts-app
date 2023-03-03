@@ -80,7 +80,7 @@ Resources:
             FunctionArn: !GetAtt authorizer.Arn
       Cors:
         AllowCredentials: true
-        AllowOrigin: !GetAtt angularFrontEndS3Bucket.WebsiteURL 
+        AllowOrigin: "'http://find-discounts-app-angularfrontends3bucket-11i37o0go93ho.s3-website-us-east-1.amazonaws.com'" 
         AllowHeaders: "'*'"
         AllowMethods: "'*'"
 
@@ -550,6 +550,5 @@ Resources:
               AWS: "748870887425"
             Action:
               - s3:ListBucket
-              - s3:PutObject
             Resource:
-              - !Join ["", ["arn:aws:s3:::", !Ref angularFrontEndS3Bucket, "/*"]]
+              - !Join ["", ["arn:aws:s3:::", !Ref angularFrontEndS3Bucket]]
